@@ -1,3 +1,5 @@
+import { Book } from "./entities/Book.ts";
+import { User } from "./entities/User.ts";
 import { BookRepository } from "./repositories/BookRepository.ts";
 import { LoanRepository } from "./repositories/LoanRepository.ts";
 import { UserRepository } from "./repositories/UserRepository.ts";
@@ -15,21 +17,26 @@ const searchByCategory = new SearchByCategoryStrategy();
 
 const library = new LibraryService(bookRepo, userRepo, loanRepo);
 
-library.registerBook(
-  1,
-  "Entendendo Algoritmos",
-  "Aditya Bhargava",
-  "Programação",
-  5,
-);
-library.registerBook(2, "Doutor Sono", "Stephen King", "Drama", 5);
+const books = [
+  new Book(1, "Entendendo Algoritmos", "Aditya Bhargava", "Programação", 5),
+  new Book(2, "Doutor Sono", "Stephen King", "Drama", 5),
+];
 
-library.registerUser(1, "Gustavo");
-library.registerUser(2, "Pedro");
+const users = [new User(1, "Gustavo"), new User(2, "Pedro")];
 
+/* Registra livros */
+library.registerBook(books);
+
+/* Registra usuários */
+library.registerUser(users);
+
+/* Executa um empréstimo */
 library.loanBook(1, 2);
-library.loanBook(1, 2);
 
+/* Executa uma devolução */
+library.giveBackBook(1, 2);
+
+/* Executa buscas por Autor e por Categoria */
 console.log(
   "Resultado da busca por Autor:",
   library.search(searchByAuthor, "Stephen King"),

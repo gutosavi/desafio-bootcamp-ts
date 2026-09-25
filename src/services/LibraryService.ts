@@ -13,18 +13,12 @@ export class LibraryService {
     private readonly loans: ILoanRepository,
   ) {}
 
-  registerBook(
-    id: number,
-    title: string,
-    author: string,
-    category: string,
-    quantity: number,
-  ): void {
+  registerBook(books: Book[]): void {
     try {
-      const book = new Book(id, title, author, category, quantity);
-
-      this.books.save(book);
-      console.log("Livro registrado:", this.books); // pra teste
+      for (const book of books) {
+        this.books.save(book);
+        console.log(`O livro ${book.title} foi registrado com sucesso.`);
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.error(`Erro ao registrar livro: ${error.message}`);
@@ -32,12 +26,12 @@ export class LibraryService {
     }
   }
 
-  registerUser(id: number, name: string): void {
+  registerUser(users: User[]): void {
     try {
-      const user = new User(id, name);
-
-      this.users.save(user);
-      console.log("Usuário registrado:", this.users); // pra teste
+      for (const user of users) {
+        this.users.save(user);
+        console.log(`O usuário ${user.name} foi registrado com sucesso.`); // pra teste
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.error(`Erro ao registrar usuário: ${error.message}`);
@@ -55,7 +49,7 @@ export class LibraryService {
       const loan = new Loan(findUser.id, findBook.id);
 
       this.loans.save(loan);
-      console.log("Livro emprestado para:", this.books); // pra teste
+      console.log(`Livro ${findBook.title} emprestado para ${findUser.name}.`);
     } catch (error) {
       if (error instanceof Error) {
         console.error(`Erro ao realizar empréstimo: ${error.message}`);
@@ -71,7 +65,9 @@ export class LibraryService {
       findBook.increase();
 
       this.loans.remove(findUser.id, findBook.id);
-      console.log("Livro devolvido:", this.books); // para teste;
+      console.log(
+        `Livro ${findBook.title} devolvido pelo usuário ${findUser.name}`,
+      );
     } catch (error) {
       if (error instanceof Error) {
         console.error(`Erro ao devolver o livro: ${error.message}`);
