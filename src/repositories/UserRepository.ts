@@ -18,13 +18,18 @@ export class UserRepository implements IUserRepository {
     const userId = this.userRepository.get(id);
 
     if (!userId) {
-      throw new Error(`Usuário de ID número ${id} não encontrado.`);
+      throw new Error(
+        `Usuário de ID número ${id} não encontrado no repositório.`,
+      );
     }
 
     return userId;
   }
 
   findAll(): Readonly<User[]> {
+    if (this.userRepository.size === 0) {
+      throw new Error("O repositório de Usuários está vazio.");
+    }
     return [...this.userRepository.values()];
   }
 }
